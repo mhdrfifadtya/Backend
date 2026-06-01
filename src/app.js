@@ -1,5 +1,6 @@
 const express = require('express');
-const cors = require('cors');
+const cors    = require('cors');
+const path    = require('path');
 require('dotenv').config();
 
 const authRoutes    = require('./routes/auth.routes');
@@ -13,12 +14,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Routes ──────────────────────────────────────────────
-app.get('/', (req, res) => {
+// ── Static files (HTML dashboard) ───────────────────────
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// ── API info (JSON) ──────────────────────────────────────
+app.get('/api', (req, res) => {
   res.json({
     success: true,
     message: 'Simple REST API is running 🚀',
     version: '1.0.0',
+    dashboard: '/',
     endpoints: {
       auth:     '/api/auth',
       products: '/api/products',
